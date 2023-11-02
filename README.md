@@ -1,5 +1,3 @@
-# openai_chatcompletion_py_client
-
 # OpenAI Chat Completion API Example
 
 This repository demonstrates a simple client-server implementation of the OpenAI Chat Completion API, which utilizes the powerful GPT-3.5 language model to create conversational AI applications. The example consists of a Python Flask server that handles the interaction with the OpenAI API, and a Python client that communicates with the server to carry out the conversation.
