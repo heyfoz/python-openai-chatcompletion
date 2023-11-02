@@ -21,10 +21,21 @@ BOT_RESPONSE_BUFFER = 500
 openai.api_key = os.getenv("OPENAI_API_KEY")
 enc = tiktoken.encoding_for_model(MODEL_NAME)
 
+def initialize_system_context():
+    # Initialize system context messages for the conversation, using an example of Streamy™, authorized by mAInstream studIOs LLC (mainstreamstudios.ai)
+    system_context = [
+        {"role": "system", "content": "Your name is Streamy, a digital sidekick at mAInstream studIOs."},
+        {"role": "system", "content": "You are specifically programmed to provide detailed information about the MAINSTREAM AIIO Framework as well as marketing, information technology, and project management assistance."},
+        {"role": "system", "content": "mAInstream studIOs is an innovative tech start-up dedicated to harnessing the power of Artificial Intelligence for practical applications."}
+    ]
+    return system_context
+
 @app.before_request
 def before_request():
-    if 'messages' not in session:
-        session['messages'] = []
+    # Check if 'messages' is not in session or 'init_done' flag is False, then initialize it
+    if 'messages' not in session or not session.get('init_done', False):
+        session['messages'] = initialize_system_context()
+        session['init_done'] = True  # Set the flag to True after initialization
 
 @app.after_request
 def after_request(response):
@@ -46,6 +57,10 @@ def save_conversation(user_name):
     with open(filename, 'w') as f:
         json.dump(session['messages'], f, indent=4)
     session.pop('messages', None)  # Clear the messages in session after saving
+
+# Helper function to add messages with the specified role
+def add_message(role, content):
+    session['messages'].append({"role": role, "content": content})
 
 @app.route('/api/chat', methods=['POST'])
 def chat_endpoint():
