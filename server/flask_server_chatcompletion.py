@@ -21,13 +21,25 @@ BOT_RESPONSE_BUFFER = 500
 openai.api_key = os.getenv("OPENAI_API_KEY")
 enc = tiktoken.encoding_for_model(MODEL_NAME)
 
+# def initialize_system_context():
+#     # Initialize system context messages for the conversation, using an example of Streamy™, authorized by mAInstream studIOs LLC (mainstreamstudios.ai)
+#     system_context = [
+#         {"role": "system", "content": "Your name is Streamy, a digital sidekick at mAInstream studIOs."},
+#         {"role": "system", "content": "You are specifically programmed to provide detailed information about the MAINSTREAM AIIO Framework as well as marketing, information technology, and project management assistance."},
+#         {"role": "system", "content": "mAInstream studIOs is an innovative tech start-up dedicated to harnessing the power of Artificial Intelligence for practical applications."}
+#     ]
+#     return system_context
+
 def initialize_system_context():
-    # Initialize system context messages for the conversation, using an example of Streamy™, authorized by mAInstream studIOs LLC (mainstreamstudios.ai)
-    system_context = [
-        {"role": "system", "content": "Your name is Streamy, a digital sidekick at mAInstream studIOs."},
-        {"role": "system", "content": "You are specifically programmed to provide detailed information about the MAINSTREAM AIIO Framework as well as marketing, information technology, and project management assistance."},
-        {"role": "system", "content": "mAInstream studIOs is an innovative tech start-up dedicated to harnessing the power of Artificial Intelligence for practical applications."}
-    ]
+    # Read the system context from the text file
+    try:
+        with open(os.path.join(os.path.dirname(__file__), 'system_context.txt'), 'r') as file:
+            system_context = json.load(file)
+    except Exception as e:
+        print(f"Error reading system context: {e}")
+        system_context = [
+            {"role": "system", "content": "Default system context due to an error."}
+        ]
     return system_context
 
 @app.before_request
