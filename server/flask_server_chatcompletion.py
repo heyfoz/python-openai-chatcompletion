@@ -16,7 +16,7 @@ Session(app)
 
 # Constants and Initializations
 MAX_ALLOWED_TOKENS = 16384
-MODEL_NAME = "gpt-3.5-turbo-16k-0613"
+MODEL_NAME = "gpt-4o"
 BOT_RESPONSE_BUFFER = 500
 openai.api_key = os.getenv("OPENAI_API_KEY")
 enc = tiktoken.encoding_for_model(MODEL_NAME)
