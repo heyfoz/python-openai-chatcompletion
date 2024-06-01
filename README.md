@@ -4,7 +4,7 @@ This repository demonstrates a simple local client-server implementation of the 
 
 ## About
 
-The OpenAI Chat Completion API provides an easy way to integrate AI-powered conversational capabilities into applications. The API leverages the GPT-3.5 language model to understand and generate human-like text based on the input it receives.
+The OpenAI Chat Completion API provides an easy way to integrate AI-powered conversational capabilities into applications. The API leverages the GPT-4o language model to understand and generate human-like text based on the input it receives.
 
 This project consists of two main components:
 
