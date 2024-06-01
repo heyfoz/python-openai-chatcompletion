@@ -10,7 +10,7 @@ This project consists of two main components:
 
 - **Server (`/server`):** A Flask application that processes incoming messages from the client, sends them to the OpenAI API, and returns the generated responses. It also handles the session state and conversation logging.
 
-- **Client (`/client`):** A simple command-line interface (CLI) that allows users to send messages to the Flask server and receive responses from the AI.
+- **Client (`/client`):** A simple command-line interface (CLI) that allows users to send messages to the Flask server and receive responses from the AI model.
 
 For more information about the OpenAI Chat Completion API, you can visit the following resources:
 
