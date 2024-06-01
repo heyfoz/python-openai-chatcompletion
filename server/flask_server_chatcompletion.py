@@ -31,7 +31,7 @@ enc = tiktoken.encoding_for_model(MODEL_NAME)
 #     return system_context
 
 def initialize_system_context():
-    # Read the system context from the text file
+    # Read the system context from the text file, using an example of the Streamy AI sidekick by mAInstream studIOs LLC (mainstreamstudios.ai).
     try:
         with open(os.path.join(os.path.dirname(__file__), 'system_context.txt'), 'r') as file:
             system_context = json.load(file)
