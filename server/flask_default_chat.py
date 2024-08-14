@@ -16,8 +16,8 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Constants and Initializations
-MAX_ALLOWED_TOKENS = 8192
-MODEL_NAME = "gpt-4"  # Updated model name
+MAX_ALLOWED_TOKENS = 4096
+MODEL_NAME = "gpt-4o"
 BOT_RESPONSE_BUFFER = 500
 openai.api_key = os.getenv("OPENAI_API_KEY")
 enc = tiktoken.encoding_for_model(MODEL_NAME)
