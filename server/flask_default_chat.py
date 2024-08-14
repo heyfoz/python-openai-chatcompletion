@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, session
 from flask_session import Session  # Flask-Session extension
-import openai
+import openai 
+from openai import OpenAI
 import os
 import json
 import tiktoken
@@ -15,20 +16,13 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Constants and Initializations
-MAX_ALLOWED_TOKENS = 16384
-MODEL_NAME = "gpt-4o"
+MAX_ALLOWED_TOKENS = 8192
+MODEL_NAME = "gpt-4"  # Updated model name
 BOT_RESPONSE_BUFFER = 500
 openai.api_key = os.getenv("OPENAI_API_KEY")
 enc = tiktoken.encoding_for_model(MODEL_NAME)
 
-# def initialize_system_context():
-#     # Initialize system context messages for the conversation, using an example of Streamy™, authorized by mAInstream studIOs LLC (mainstreamstudios.ai)
-#     system_context = [
-#         {"role": "system", "content": "Your name is Streamy, a digital sidekick at mAInstream studIOs."},
-#         {"role": "system", "content": "You are specifically programmed to provide detailed information about the MAINSTREAM AIIO Framework as well as marketing, information technology, and project management assistance."},
-#         {"role": "system", "content": "mAInstream studIOs is an innovative tech start-up dedicated to harnessing the power of Artificial Intelligence for practical applications."}
-#     ]
-#     return system_context
+client = OpenAI()
 
 def initialize_system_context():
     # Read the system context from the text file, using an example of the Streamy AI sidekick by mAInstream studIOs LLC (mainstreamstudios.ai).
@@ -64,8 +58,16 @@ def calculate_messages_tokens(messages):
     return total_tokens
 
 def save_conversation(user_name):
+        # Define the directory for saving chat history
+    chat_history_dir = './server/chat_history'
+
+    # Create the directory if it does not exist
+    os.makedirs(chat_history_dir, exist_ok=True)
+
+    # Save the conversation history to a file
+    filename = os.path.join(chat_history_dir, f"chat_{user_name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json")
     # Use the user_name from the request to save the file
-    filename = f"conversation_{user_name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json"
+    # filename = f"conversation_{user_name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json"
     with open(filename, 'w') as f:
         json.dump(session['messages'], f, indent=4)
     session.pop('messages', None)  # Clear the messages in session after saving
@@ -84,8 +86,9 @@ def chat_endpoint():
     # Calculate the available token space for the response
     max_response_tokens = MAX_ALLOWED_TOKENS - calculate_messages_tokens(session['messages']) - BOT_RESPONSE_BUFFER
 
-    try:  # Call the Chat completions API with appropriate parameters
-        response = openai.ChatCompletion.create(
+    try:
+        # Call the Chat completions API with appropriate parameters
+        response = client.chat.completions.create(
             model=MODEL_NAME,
             messages=session['messages'],  # Use the messages from the session
             temperature=1,
@@ -94,19 +97,19 @@ def chat_endpoint():
             frequency_penalty=1,
             presence_penalty=1
         )
-        tokens_used = response['usage']['total_tokens']
 
+        # Access usage and choices using dot notation
+        tokens_used = response.usage.total_tokens  # Correct access to 'total_tokens'
+        
         if tokens_used + calculate_messages_tokens(session['messages']) > MAX_ALLOWED_TOKENS:
             print("Token limit exceeded by the bot's response.")
             return jsonify({"response": "Sorry, the token limit has been exceeded."})
 
         # Add the assistant's response to the session messages
-        session['messages'].append({"role": "assistant", "content": response.choices[0].message['content']})
-        
-        # Retrieve the latest message which is the bot's response
-        bot_response = response.choices[0].message['content']
+        bot_response = response.choices[0].message.content  # Accessing 'content' via dot notation
+        session['messages'].append({"role": "assistant", "content": bot_response})
 
-    except openai.error.OpenAIError as e:
+    except openai.OpenAIError as e:  # Corrected error handling to match the updated client
         print(f"OpenAI Error: {e}.")
         return jsonify({"response": f"An OpenAI error occurred: {e}"})
     except Exception as e:
@@ -129,4 +132,29 @@ if __name__ == '__main__':
         app.run(debug=True)
     finally:
         # Here we should not save the conversation because we don't have a user_name
-        pass  
+        pass
+
+"""
+Reponse example
+{
+  "id": "chatcmpl-123",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "gpt-4o-mini",
+  "system_fingerprint": "fp_44709d6fcb",
+  "choices": [{
+    "index": 0,
+    "message": {
+      "role": "assistant",
+      "content": "\n\nHello there, how may I assist you today?",
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+  }],
+  "usage": {
+    "prompt_tokens": 9,
+    "completion_tokens": 12,
+    "total_tokens": 21
+  }
+}
+"""

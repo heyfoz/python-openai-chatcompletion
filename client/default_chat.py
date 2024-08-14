@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from datetime import datetime
 
 SERVER_ENDPOINT = "http://127.0.0.1:5000/api/chat"
@@ -57,11 +58,22 @@ def chat():
         save_conversation()
 
 def save_conversation():
+    # Define the directory for saving chat history
+    chat_history_dir = './client/chat_history'
+
+    # Create the directory if it does not exist
+    os.makedirs(chat_history_dir, exist_ok=True)
+
     # Save conversation to local file
-    filename = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_conversation_{user_name}.json"
+    filename = os.path.join(chat_history_dir, f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_conversation_{user_name}.json")
     with open(filename, "w") as json_file:
         json.dump(conversation, json_file, indent=4)
         print(f"Conversation saved locally to {filename}")
+    # # Save conversation to local file
+    # filename = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_conversation_{user_name}.json"
+    # with open(filename, "w") as json_file:
+    #     json.dump(conversation, json_file, indent=4)
+    #     print(f"Conversation saved locally to {filename}")
 
     try:
         # Request the server to save the conversation, including the hardcoded user name
