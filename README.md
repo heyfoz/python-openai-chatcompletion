@@ -29,18 +29,36 @@ For more information about the OpenAI Chat Completion API, visit:
 - Conversation persistence on both client and server sides.
 - Customizable user identification for conversation logging.
 
+## Authentication
+The script requires an API key from OpenAI for authentication. Before running the script, set up an environment variable `OPENAI_API_KEY` with your OpenAI API key. Retrieve your API key from your [API Keys page on OpenAI](https://platform.openai.com/account/api-keys).
+
+For assistance on setting up environment variables:
+- On Windows, follow Microsoft's guide on [Environment Variables](https://learn.microsoft.com/en-us/windows/win32/procthread/environment-variables).
+- On Linux/Unix, refer to the guide on [setting environment variables in Linux](https://linuxize.com/post/how-to-set-and-list-environment-variables-in-linux/).
+
 ## Setup
 
 To get started with this example:
 
 1. Clone the repository to your local machine.
 2. Install the required dependencies by running `pip install -r requirements.txt` in both the `/client` and `/server` directories.
-3. Create an `.env` file within the `/server` directory containing your OpenAI API key like so:
+3. Set your OpenAI API key as an environment variable on your PC:
 
-    ```plaintext
-    OPENAI_API_KEY='your_api_key_here'
-    ```
+    - On **Windows Command Prompt**:
+      ```bash
+      setx OPENAI_API_KEY "your_api_key_here"
+      ```
 
+    - On **Windows PowerShell**:
+      ```powershell
+      [System.Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'your_api_key_here', 'User')
+      ```
+
+    - On **macOS/Linux**:
+      ```bash
+      export OPENAI_API_KEY='your_api_key_here'
+      ```
+      
 4. Choose your server and client scripts:
    - **Default Chat:** 
      - Run the server with `python flask_default_chat.py` within the `/server` directory.
