@@ -8,13 +8,13 @@ The OpenAI Chat Completion API enables easy integration of AI-powered conversati
 
 This project consists of two main components:
 
-- **Server (`/server`):** A Flask application that processes incoming messages from the client, sends them to the OpenAI API, and returns the generated responses. It handles session state and conversation logging. You have two server options:
+- **Server (`./server`):** A Flask application that processes incoming messages from the client, sends them to the OpenAI API, and returns the generated responses. It handles session state and conversation logging. You have two server options:
   - **Default Chat:** Standard chat mode where the entire response is sent at once.
-  - **Stream Chat:** Receives chunks of text to simulate dynamic typing, providing a more interactive experience.
+  - **Streaming Chat:** Receives chunks of text to simulate dynamic typing, providing a more interactive experience.
 
-- **Client (`/client`):** A command-line interface (CLI) that allows users to send messages to the Flask server and receive responses from the AI model. You can choose between:
+- **Client (`./client`):** A command-line interface (CLI) that allows users to send messages to the Flask server and receive responses from the AI model. You can choose between:
   - **Default Chat Client:** For standard chat interactions.
-  - **Stream Chat Client:** For an experience where responses appear as if they are being typed out dynamically.
+  - **Streaming Chat Client:** For an experience where responses appear as if they are being typed out dynamically.
 
 For more information about the OpenAI Chat Completion API, visit:
 - [Playground](https://platform.openai.com/playground)
@@ -41,7 +41,7 @@ For assistance on setting up environment variables:
 To get started with this example:
 
 1. Clone the repository to your local machine.
-2. Install the required dependencies by running `pip install -r requirements.txt` in both the `/client` and `/server` directories.
+2. Install the required dependencies by running `pip install -r requirements.txt` in both the `./client` and `./server` directories.
 3. Set your OpenAI API key as an environment variable on your PC:
 
     - On **Windows Command Prompt**:
