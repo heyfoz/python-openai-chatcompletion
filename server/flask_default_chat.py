@@ -92,7 +92,7 @@ def chat_endpoint():
             model=MODEL_NAME,
             messages=session['messages'],  # Use the messages from the session
             temperature=1,
-            max_tokens=max_response_tokens,
+            max_completion_tokens=max_response_tokens,
             top_p=1,
             frequency_penalty=1,
             presence_penalty=1
