@@ -74,7 +74,7 @@ def chat_endpoint():
                 model=MODEL_NAME,
                 messages=conversation,
                 temperature=1,
-                max_tokens=max_response_tokens,
+                max_completions_tokens=max_response_tokens,
                 top_p=1,
                 frequency_penalty=1,
                 presence_penalty=1,
